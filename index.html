@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VEIL — privacy-native coordination on Solana</title>
+  <meta name="description" content="VEIL is a modular privacy layer for agents & payments on Solana. Encrypted intents, masked routing, verifiable settlement.">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="nav">
+    <div class="container nav-inner">
+      <div class="brand"><span class="badge">V</span> VEIL</div>
+      <div>
+        <a href="#features">Features</a>
+        <a href="#usage">Usage</a>
+        <a href="#sdk">SDK</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#docs">Docs</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="container">
+      <div class="tag">solana-native</div>
+      <h1 class="h1">The quiet layer for private on‑chain agents.</h1>
+      <p class="sub">VEIL provides encrypted intents, masked routing, and verifiable settlement so bots, agents, and apps can coordinate without exposing patterns. Built for Solana speed.</p>
+      <div class="cta">
+        <a class="btn primary" href="#usage">Get Started</a>
+        <a class="btn" href="#docs">Read the Docs</a>
+        <a class="btn" href="#examples">Examples</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="section">
+    <div class="container">
+      <div class="kicker">Capabilities</div>
+      <h2>Unseen. Verifiable. Fast.</h2>
+      <div class="grid cards" style="margin-top:16px">
+        <div class="card">
+          <h3>Encrypted Intents</h3>
+          <p class="small">Sensitive payloads are sealed before transit. Selective reveal lets you disclose only what’s required for audit or dispute.</p>
+        </div>
+        <div class="card">
+          <h3>Masked Routing</h3>
+          <p class="small">Route payouts and messages without exposing sender/recipient patterns. Perfect for fleets and relays.</p>
+        </div>
+        <div class="card">
+          <h3>Verifiable Settlement</h3>
+          <p class="small">Receipts are cryptographically verifiable. Keep trust high while keeping surfaces minimal.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="usage" class="section">
+    <div class="container">
+      <div class="kicker">Quickstart</div>
+      <h2>Usage</h2>
+      <p class="small">Install the SDK, create a Veil client, and send a private intent. Works with Node, Deno, and browser builds.</p>
+      <div class="code" style="margin-top:12px">
+        <pre><code># install
+npm i @veil/sdk
+
+# or
+pnpm add @veil/sdk
+yarn add @veil/sdk</code></pre>
+      </div>
+      <div class="code" style="margin-top:12px">
+        <pre><code>import { VeilClient } from "@veil/sdk";
+
+const veil = new VeilClient({
+  cluster: "mainnet-beta",
+  treasury: "YOUR_TREASURY_PUBKEY",
+  relayUrl: "https://relay.veil.run"
+});
+
+// 1) encrypt a payment intent
+const intent = await veil.encryptIntent({
+  to: "RECIPIENT_PUBKEY",
+  amount: 0.25, // SOL
+  memo: "agent payout #402"
+});
+
+// 2) submit with masked routing
+const tx = await veil.submitMasked(intent);
+
+// 3) verify a selective receipt later
+const proof = await veil.prove(tx.signature);
+console.log("verified:", proof.valid);</code></pre>
+      </div>
+      <table class="table" style="margin-top:16px">
+        <thead><tr><th>Feature</th><th>Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Encrypted intents</td><td class="ok">alpha</td><td>sealed payload, sealed headers</td></tr>
+          <tr><td>Masked routing</td><td class="ok">alpha</td><td>batching + sponsor-fees</td></tr>
+          <tr><td>Selective reveal</td><td class="warn">beta</td><td>disclose to auditor or recipient only</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="sdk" class="section">
+    <div class="container">
+      <div class="kicker">Developers</div>
+      <h2>SDK & APIs</h2>
+      <div class="grid cards" style="margin-top:16px">
+        <div class="card">
+          <h3>JavaScript</h3>
+          <p class="small">Same-day integration with familiar primitives. Tree‑shakeable, tiny footprint.</p>
+          <div class="code"><pre><code>import { createVeilKeypair } from "@veil/sdk/crypto";
+const kp = await createVeilKeypair();
+console.log(kp.publicKey.toBase58());</code></pre></div>
+        </div>
+        <div class="card">
+          <h3>HTTP Relay</h3>
+          <p class="small">Drop-in relay accepts sealed intents and returns settlement signatures.</p>
+          <div class="code"><pre><code>POST /v1/relay
+Authorization: Bearer &lt;key&gt;
+Body: { sealed: "&lt;base64&gt;" }</code></pre></div>
+        </div>
+        <div class="card">
+          <h3>Receipts</h3>
+          <p class="small">Proof objects verify integrity without leaking counterparties.</p>
+          <div class="code"><pre><code>const proof = await veil.prove(sig)
+if (proof.valid) console.log("ok")</code></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="examples" class="section">
+    <div class="container">
+      <div class="kicker">Examples</div>
+      <h2>What you can build</h2>
+      <div class="grid cards" style="margin-top:16px">
+        <div class="card"><h3>Agent fleets</h3><p class="small">Pay LLM agents privately with masked micro‑payouts and verifiable receipts.</p></div>
+        <div class="card"><h3>Tip/airdrop relays</h3><p class="small">Batch and route thousands of tiny payments without leaking your treasury map.</p></div>
+        <div class="card"><h3>Consumer wallets</h3><p class="small">Selective‑reveal receipts keep UX smooth while remaining auditable.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="section">
+    <div class="container">
+      <div class="kicker">Pricing</div>
+      <h2>Free while in Alpha</h2>
+      <p class="small">VEIL is free for early builders. Production pricing will be usage‑based with generous free tiers.</p>
+    </div>
+  </section>
+
+  <section id="docs" class="section">
+    <div class="container">
+      <div class="kicker">Docs</div>
+      <h2>Documentation</h2>
+      <p class="small">Full docs ship with the SDK. For access and test keys, DM the project account.</p>
+      <div class="cta">
+        <a class="btn" href="assets/veil-logo.svg" download>Download Logo</a>
+        <a class="btn" href="#usage">Start Building</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:12px">
+        <img src="assets/veil-logo.svg" width="28" height="28" alt="VEIL logo">
+        <span class="small">© 2025 VEIL — privacy-native coordination on Solana</span>
+      </div>
+      <div class="small">status: alpha • @veil (placeholder)</div>
+    </div>
+  </div>
+</body>
+</html>
